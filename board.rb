@@ -36,7 +36,17 @@ class Board
     # I used several helper methods here. You will want to know if each row, 
     # column, and 3x3 square has been solved.
 
+    def update_value(tile)
 
+    end
+    
+    def render
+
+    end 
+
+    def solved?
+
+    end 
 end
 
 
