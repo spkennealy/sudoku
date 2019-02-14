@@ -1,24 +1,13 @@
-require 'colorize'
-
 class Tile
 
-    attr_reader :value
+    attr_accessor :value, :show
 
     def initialize(value)
         @value = value
-        @show = false
-        @show = true if value > 0
+        value > 0 ? @show = true : @show = false
     end 
 
     def to_s
         " #{@value} "
-    end 
-
-    def hide
-        @show = false
-    end
-
-    def show
-        @show = true
     end 
 end 

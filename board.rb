@@ -1,16 +1,18 @@
-require_relative "tile.rb"
+class String
+    def red;            "\e[31m#{self}\e[0m" end
+    def yellow;         "\e[1;33m#{self}\e[0m" end
+    def bold;           "\e[1m#{self}\e[21m" end
+    def underline;      "\e[4m#{self}\e[24m" end
+end
+
+require_relative "tile"
 
 class Board
 
-# A Board should store a grid of Tiles. Define your Board#initialize method 
-# to accept such a grid as an argument. Since our puzzles exist as text files, 
-# let's write a Board::from_file factory method to read a file and parse it 
-# into a two-dimensional Array containing Tile instances.
-
-    attr_reader :board
+    attr_reader :grid
 
     def initialize(file)
-        @board = Board.from_file(file)
+        @grid = Board.from_file(file)
     end
 
     def self.from_file(file)
@@ -29,38 +31,39 @@ class Board
         tiled
     end
 
-    # The Board class will be doing much of the heavy lifting for our game's 
-    # logic. It will need the following methods:
-
-    # A method to update the value of a Tile at the given position
-    # A render method to display the current board state
-    # A solved? method to let us know if the game is over
-    # I used several helper methods here. You will want to know if each row, 
-    # column, and 3x3 square has been solved.
-
     def [](pos)
-        @board[pos[0]][pos[1]]
+        @grid[pos[0]][pos[1]].value.to_i
     end
 
-    def []=(pos, value)
-        @board[pos[0]][pos[1]] = value
+    def []=(pos, input_value)
+        @grid[pos[0]][pos[1]].value = input_value
     end
 
     def render
         puts ""
-        puts " S U D O K U"
-        @board.each_with_index do |row, row_idx|
-            if row_idx % 3 == 0
-                puts " ======================================================="
+        puts "                         S U D O K U".bold.red
+        puts "  == 1 === 2 === 3 === 4 === 5 === 6 === 7 === 8 === 9 ==".bold.red
+        # puts "  |     |     |     |     |     |     |     |     |     |"
+        @grid.each_with_index do |row, row_idx|
+            if row_idx % 3 == 0 && row_idx != 0
+                puts "  ======================================================="
+                print "#{row_idx + 1}".bold.red
+            else
+                print "#{row_idx + 1}".bold.red
             end 
             row.each_with_index do |tile, tile_idx|
                 if tile.value > 0
                     if tile_idx % 3 == 0 || tile_idx == row.length
-                        print " | "
+                        print " | ".bold
                     else 
                         print " : " 
                     end
-                    print " #{tile.value} "
+                    
+                    if tile.show
+                        print " #{tile.value} ".yellow
+                    else 
+                        print " #{tile.value} "
+                    end 
                 else
                     if tile_idx % 3 == 0 || tile_idx == row.length
                         print " | "
@@ -76,12 +79,63 @@ class Board
     end 
 
     def solved?
+        solved_all_rows? && solved_all_rows? && solved_all_squares?
+    end 
 
+    def solved_all_rows?
+        @grid.all? do |row|
+            ordered_row = []
+            row.each do |tile|
+                ordered_row << tile.value
+            end 
+            ordered_row.sort == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        end 
+    end 
+
+    def solved_all_columns?
+        transposed = @grid.transpose
+        transposed.all? do |row|
+            ordered_column = []
+            row.each do |tile|
+                ordered_column << tile.value
+            end 
+            ordered_column.sort == (1..9).to_a
+        end 
+    end 
+
+    def solved_all_squares?
+        left_squares_array = []
+        middle_squares_array = []
+        right_squares_array = []
+
+        @grid.each_with_index do |row, row_idx|
+            
+            row.each_with_index do |tile, col_idx|
+                if col_idx < 3 
+                    left_squares_array << tile.value
+                elsif col_idx > 2 && col_idx < 6
+                    middle_squares_array << tile.value
+                else
+                    right_squares_array << tile.value 
+                end
+            end
+        end 
+
+        squares_array = [
+            left_squares_array[0..8], 
+            left_squares_array[9..17],
+            left_squares_array[18..26],
+            middle_squares_array[0..8],
+            middle_squares_array[9..17],
+            middle_squares_array[18..26],
+            right_squares_array[0..8],
+            right_squares_array[9..17],
+            right_squares_array[18..26]
+        ]
+        
+        squares_array.all? do |square|
+            square.sort == (1..9).to_a
+        end 
+        
     end 
 end
-
-
-system("clear")
-file = "puzzles/sudoku1.txt"
-board1 = Board.new(file)
-board1.render
