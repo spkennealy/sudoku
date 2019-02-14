@@ -17,7 +17,7 @@ class Game
             "solved" => "puzzles/sudoku1_solved.txt"
         }
 
-        puts "-- Sudoku --"
+        puts "Want to play Sudoku????"
         puts "Pick a puzzle: 1, 2, or 3"
         sudoku = gets.chomp.to_i
         @board = Board.new(sudokus[sudoku])
