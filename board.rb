@@ -48,18 +48,31 @@ class Board
 
     def render
         puts ""
-        puts "S U D O K U"
-        @board.each do |row|
-            puts "-------------------------------------"
-            row.each do |tile|
+        puts " S U D O K U"
+        @board.each_with_index do |row, row_idx|
+            if row_idx % 3 == 0
+                puts " ======================================================="
+            end 
+            row.each_with_index do |tile, tile_idx|
                 if tile.value > 0
-                    print "| #{tile.value} "
+                    if tile_idx % 3 == 0 || tile_idx == row.length
+                        print " | "
+                    else 
+                        print " : " 
+                    end
+                    print " #{tile.value} "
                 else
-                    print "|   "
+                    if tile_idx % 3 == 0 || tile_idx == row.length
+                        print " | "
+                    else 
+                        print " : " 
+                    end
+                    print "   "
                 end 
             end
-            puts "|"
+            puts " | "
         end 
+        puts " ======================================================="
     end 
 
     def solved?
@@ -68,7 +81,7 @@ class Board
 end
 
 
-# system("clear")
+system("clear")
 file = "puzzles/sudoku1.txt"
 board1 = Board.new(file)
 board1.render
