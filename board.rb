@@ -66,14 +66,14 @@ class Board
                     end 
                 else
                     if tile_idx % 3 == 0 || tile_idx == row.length
-                        print " | "
+                        print " | ".bold
                     else 
                         print " : "
                     end
                     print "   "
                 end 
             end
-            puts " | "
+            puts " | ".bold
         end 
         puts " ======================================================="
     end 
