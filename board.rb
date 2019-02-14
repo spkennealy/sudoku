@@ -32,7 +32,7 @@ class Board
     end
 
     def [](pos)
-        @grid[pos[0]][pos[1]].value.to_i
+        @grid[pos[0]][pos[1]].value
     end
 
     def []=(pos, input_value)
@@ -43,7 +43,7 @@ class Board
         puts ""
         puts "                         S U D O K U".bold.red
         puts "  == 1 === 2 === 3 === 4 === 5 === 6 === 7 === 8 === 9 ==".bold.red
-        # puts "  |     |     |     |     |     |     |     |     |     |"
+
         @grid.each_with_index do |row, row_idx|
             if row_idx % 3 == 0 && row_idx != 0
                 puts "  ======================================================="
@@ -56,7 +56,7 @@ class Board
                     if tile_idx % 3 == 0 || tile_idx == row.length
                         print " | ".bold
                     else 
-                        print " : " 
+                        print " : "
                     end
                     
                     if tile.show
@@ -68,7 +68,7 @@ class Board
                     if tile_idx % 3 == 0 || tile_idx == row.length
                         print " | "
                     else 
-                        print " : " 
+                        print " : "
                     end
                     print "   "
                 end 

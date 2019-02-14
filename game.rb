@@ -13,10 +13,11 @@ class Game
             1 => "puzzles/sudoku1.txt",
             2 => "puzzles/sudoku2.txt",
             3 =>  "puzzles/sudoku3.txt",
-            "easy" => "puzzles/sudoku1_almost.txt",
-            "solved" => "puzzles/sudoku1_solved.txt"
+            4 => "puzzles/sudoku1_almost.txt",
+            5 => "puzzles/sudoku1_solved.txt"
         }
-
+        
+        system("clear")
         puts "Want to play Sudoku????"
         puts "Pick a puzzle: 1, 2, or 3"
         sudoku = gets.chomp.to_i
@@ -29,6 +30,11 @@ class Game
         until @board.solved?
             prompt
         end
+
+        puts ""
+        puts "CONGRATULATIONS!!! YOU SOLVED IT!!!".bold.underline
+        puts ""
+        puts "🎊🎉🎉🎉🥳🥳🥳🎉🎉🎉🎊"
     end 
 
     def prompt
@@ -64,5 +70,7 @@ class Game
     end 
 end 
 
-game1 = Game.new 
-game1.start
+if __FILE__ == $PROGRAM_NAME
+    game1 = Game.new 
+    game1.start
+end 
