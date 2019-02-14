@@ -18,10 +18,12 @@ class Board
         tiled = []
 
         lines.each do |row|
+            current_row_tiles = []
             array_of_digits = row.split("")
             array_of_digits.map do |num_string|
-                tiled << Tile.new(num_string.to_i)
+                current_row_tiles << Tile.new(num_string.to_i)
             end
+            tiled << current_row_tiles
         end 
         
         tiled
@@ -36,12 +38,28 @@ class Board
     # I used several helper methods here. You will want to know if each row, 
     # column, and 3x3 square has been solved.
 
-    def update_value(tile)
-
+    def [](pos)
+        @board[pos[0]][pos[1]]
     end
-    
-    def render
 
+    def []=(pos, value)
+        @board[pos[0]][pos[1]] = value
+    end
+
+    def render
+        puts ""
+        puts "S U D O K U"
+        @board.each do |row|
+            puts "-------------------------------------"
+            row.each do |tile|
+                if tile.value > 0
+                    print "| #{tile.value} "
+                else
+                    print "|   "
+                end 
+            end
+            puts "|"
+        end 
     end 
 
     def solved?
@@ -50,6 +68,7 @@ class Board
 end
 
 
-system("clear")
+# system("clear")
 file = "puzzles/sudoku1.txt"
 board1 = Board.new(file)
+board1.render
